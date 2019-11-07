@@ -1,1 +1,1 @@
-Demo: https://hungry-hermann-898086.netlify.com/
+Demo: https://react360vidthreejs.netlify.com/
