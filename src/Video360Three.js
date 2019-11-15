@@ -1,17 +1,28 @@
-import React, { Component } from "react"; 
+import React, { Component } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-
- 
- 
-
 class Video360Three extends Component {
-  componentDidMount() {     
+  componentDidMount() {
+    this.addVideoPlayer();
     this.sceneSetup();
     this.addCustomSceneObjects();
     this.startAnimationLoop();
     window.addEventListener("resize", this.handleWindowResize);
+  }
+
+  // Add a hidden video player object in document body
+  addVideoPlayer() {
+    const vNode = document.createElement("video");
+    vNode.setAttribute("id", this.props.Id);
+    vNode.setAttribute("loop", "true");
+    vNode.muted = true;
+    vNode.setAttribute("crossorigin", "anonymous");
+    vNode.setAttribute("playsinline", "true");
+    vNode.setAttribute("src", this.props.src);
+    vNode.setAttribute("type", "video/mp4");
+    vNode.style.display = "none";
+    document.body.appendChild(vNode);
   }
 
   componentWillUnmount() {
@@ -35,7 +46,7 @@ class Video360Three extends Component {
       1000 // far plane
     );
 
-    this.camera.target = new THREE.Vector3( 0, 0, 0 );
+    this.camera.target = new THREE.Vector3(0, 0, 0);
 
     this.camera.position.z = 5; // is used here to set some distance from a cube that is located at z = 0
     // OrbitControls allow a camera to orbit around the object
@@ -49,20 +60,17 @@ class Video360Three extends Component {
   // Here should come custom code.
 
   addCustomSceneObjects = () => {
-     
-    const video = document.getElementById( 'video' );
-				video.play();
+    const video = document.getElementById(this.props.Id);
+    video.play();
 
-     const texture = new THREE.VideoTexture( video );
+    const texture = new THREE.VideoTexture(video);
+
     const material = new THREE.MeshBasicMaterial({ map: texture });
- 
- 
-var geometry = new THREE.SphereBufferGeometry( 500, 60, 40 );
+
+    var geometry = new THREE.SphereBufferGeometry(500, 60, 40);
 
     // invert the geometry on the x-axis so that all of the faces point inward
     geometry.scale(-1, 1, 1);
-
-    
 
     this.cube = new THREE.Mesh(geometry, material);
 
@@ -72,9 +80,8 @@ var geometry = new THREE.SphereBufferGeometry( 500, 60, 40 );
   };
 
   startAnimationLoop = () => {
-     
-    if(this.props.autoRotate==='true'){ 
-        this.cube.rotation.y += 0.0009
+    if (this.props.autoRotate === "true") {
+      this.cube.rotation.y += 0.0009;
     }
 
     this.renderer.render(this.scene, this.camera);
@@ -98,15 +105,16 @@ var geometry = new THREE.SphereBufferGeometry( 500, 60, 40 );
   };
 
   render() {
- 
-    return <div style={{width:Number(this.props.width),height:Number(this.props.height)}} ref={ref => (this.el = ref)} />;
+    return (
+      <div
+        style={{
+          width: Number(this.props.width),
+          height: Number(this.props.height)
+        }}
+        ref={ref => (this.el = ref)}
+      />
+    );
   }
 }
 
-
-
- 
 export default Video360Three;
-
-
-
