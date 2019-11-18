@@ -1,1 +1,1 @@
-Demo: https://react360vidthreejs.netlify.com/
+Demo: https://8y57q.csb.app/
